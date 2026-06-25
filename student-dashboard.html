@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="cyber-wrapper">
-        <!-- Neon Header Grid HUD -->
         <header class="cyber-hud-nav">
             <div class="hud-logo">
                 <h2>CORE_SYS // STUDENT_VERIFICATION</h2>
@@ -16,12 +15,9 @@
             <button id="logoutBtn" class="cyber-btn-abort">DISCONNECT_SESSION</button>
         </header>
 
-        <!-- Main Cybernetic Dashboard Interface Layout -->
         <main class="cyber-grid-container">
-            
             <section class="cyber-panel-sidebar">
                 <div class="neon-avatar-frame">
-                    <!-- Default canvas fallback image renders instantly to cloud hosted photo path link -->
                     <img id="viewPhoto" src="https://placeholder.com" alt="System Profile Core">
                 </div>
                 
@@ -30,7 +26,6 @@
                 </div>
             </section>
 
-            <!-- Right Grid Panel: Relational Database Metric Nodes Matrix -->
             <section class="cyber-panel-main">
                 <div class="panel-header-glitch">
                     <h3>RESPECTIVE_DATA_NODES_MATRIX</h3>
@@ -53,15 +48,14 @@
         </main>
     </div>
 
-    <!-- Data Presentation Module Script -->
+    <!-- ⚡ FORCE-CONNECTED IMMUTABLE CLOUD MODULES -->
     <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getFirestore, doc, getDoc } from "https://gstatic.com";
+        import { initializeApp } from "https://jsdelivr.net";
+        import { getFirestore, doc, getDoc } from "https://jsdelivr.net";
 
-        // ✅ Pre-loaded with your verified Firebase Config keys
         const firebaseConfig = {
             apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
-            authDomain: "://firebaseapp.com",
+            authDomain: "student-portal-406ac.firebaseapp.com",
             projectId: "student-portal-406ac",
             storageBucket: "student-portal-406ac.firebasestorage.app",
             messagingSenderId: "9138034883",
@@ -72,14 +66,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Runtime chronological engine computing exact current age from timestamp strings
         function solveAgeMetric(dobStringValue) {
             const birthDate = new Date(dobStringValue);
             const today = new Date();
-            
             let solvedAge = today.getFullYear() - birthDate.getFullYear();
             const monthDifference = today.getMonth() - birthDate.getMonth();
-            
             if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
                 solvedAge--;
             }
@@ -90,7 +81,6 @@
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const activeRollNo = sessionStorage.getItem('activeRollNo');
 
-            // System Protection: Terminate link rendering if authentication session variables are missing
             if (!isLoggedIn || !activeRollNo) {
                 window.location.href = 'index.html';
                 return;
@@ -103,7 +93,7 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
 
-                    // Direct interface text mappings injection execution blocks
+                    // Maps fields values directly onto UI tokens placeholders
                     document.getElementById('viewName').innerText = data.fullName ? data.fullName.toUpperCase() : "---";
                     document.getElementById('viewFullName').innerText = data.fullName || "---";
                     document.getElementById('viewRegNo').innerText = data.regNo || "---";
@@ -113,29 +103,25 @@
                     document.getElementById('viewAddress').innerText = data.address || "---";
                     document.getElementById('viewParentName').innerText = data.parentName || "---";
                     document.getElementById('viewParentPhone').innerText = data.parentNumber || "---";
-                    document.getElementById('viewCgpa').innerText = data.cgpa ? parseFloat(data.cgpa).toFixed(2) : "0.00";
-                    document.getElementById('viewAttendance').innerText = data.attendance ? parseFloat(data.attendance).toFixed(1) + "%" : "0.0%";
+                    document.getElementById('viewCgpa').innerText = data.cgpa || "0.00";
+                    document.getElementById('viewAttendance').innerText = data.attendance || "0.0%";
                     document.getElementById('viewAccommodation').innerText = data.accommodation ? data.accommodation.toUpperCase() : "DAYSCHOLOR";
                     document.getElementById('viewType').innerText = data.accommodation || "Dayscholor";
                     
-                    // Fire exact age equation engine 
                     if (data.dob) {
                         document.getElementById('viewAge').innerText = solveAgeMetric(data.dob) + " _SOLVED_YEAR_CYCLES";
                     }
-
-                    // Pull, map, and output profile picture stream path links
                     if (data.photoUrl) {
                         document.getElementById('viewPhoto').src = data.photoUrl;
                     }
                 } else {
-                    alert("FATAL_ERROR: Profile node path missing inside database server collections mapping rows.");
+                    alert("System Link Broken: No document payload found inside Firestore database.");
                 }
             } catch (err) {
-                console.error("Critical core UI pipeline rendering crash: ", err);
+                console.error("Critical rendering error: ", err);
             }
         });
 
-        // Abort Session Button Controller
         document.getElementById('logoutBtn').addEventListener('click', function() {
             sessionStorage.clear();
             window.location.href = 'index.html';
