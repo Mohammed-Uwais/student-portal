@@ -1,0 +1,338 @@
+/* 🤖 CORE MATRIX DEFINITIONS & ANIMATIONS */
+:root {
+    --cyber-void: #020204;
+    --sector-dark: #05060b;
+    --neon-toxic: #00ff66;
+    --neon-cyber: #00f0ff;
+    --neon-laser: #ff0055;
+    --rgb-gradient: linear-gradient(90deg, #ff0055, #00f0ff, #00ff66, #ff0055);
+    --toxic-glow: rgba(0, 255, 102, 0.4);
+    --cyber-glow: rgba(0, 240, 255, 0.4);
+    --laser-glow: rgba(255, 0, 85, 0.4);
+    --text-terminal: #ffffff;
+    --text-dim: #5c6479;
+}
+
+body {
+    background-color: var(--cyber-void);
+    color: var(--text-terminal);
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 💀 OVERLAY GLITCH SCANLINE MATRIX EFFECT */
+body::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 99999;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* 🕹️ CHROMATIC RGB MARQUEE ANIMATION FRAMEWORK */
+@keyframes rgb-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
+}
+
+@keyframes terminal-pulse {
+    0% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+}
+
+@keyframes glitch-text {
+    0% { text-shadow: 2px -1px var(--neon-laser), -2px 1px var(--neon-cyber); }
+    50% { text-shadow: -2px 2px var(--neon-laser), 2px -2px var(--neon-toxic); }
+    100% { text-shadow: 1px -2px var(--neon-cyber), -1px 2px var(--neon-laser); }
+}
+
+/* ⚡ SECURE ENTRY TERMINAL (LOGIN) */
+.login-container {
+    max-width: 440px;
+    margin: 100px auto;
+    background-color: var(--sector-dark);
+    padding: 45px;
+    border: 3px solid transparent;
+    border-image: var(--rgb-gradient) 1;
+    background-clip: padding-box;
+    position: relative;
+    animation: rgb-shift 8s linear infinite, terminal-pulse 4s infinite ease-in-out;
+}
+
+.login-container::before {
+    content: "[ CORE_SYS // UNAUTHORIZED_PROBE_DETECTED ]";
+    display: block;
+    position: absolute;
+    top: -15px;
+    left: 15px;
+    background: var(--cyber-void);
+    color: var(--neon-laser);
+    font-size: 11px;
+    padding: 2px 8px;
+    font-weight: bold;
+    border: 1px solid var(--neon-laser);
+    animation: glitch-text 1s infinite linear;
+}
+
+.login-header h2 {
+    color: var(--neon-toxic);
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    animation: glitch-text 2s infinite steps(2);
+}
+
+.login-header p {
+    color: var(--text-dim);
+    font-size: 11px;
+    margin: 0 0 35px 0;
+    text-transform: uppercase;
+}
+
+.input-group {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 12px;
+    color: var(--neon-cyber);
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    background: #020306;
+    border: 2px solid var(--text-dim);
+    color: var(--text-pure);
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.input-group input:focus {
+    border-color: var(--neon-cyber);
+    color: var(--neon-cyber);
+    outline: none;
+    box-shadow: 0 0 20px var(--cyber-glow);
+}
+
+/* 🔥 RGB ACTION INITIATOR CONTROL TRIGGER BUTTON */
+.btn {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    color: var(--text-pure);
+    font-weight: 900;
+    font-size: 16px;
+    font-family: inherit;
+    text-transform: uppercase;
+    border: 3px solid transparent;
+    border-image: var(--rgb-gradient) 1;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.1s ease;
+    animation: rgb-shift 6s linear infinite;
+}
+
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    color: var(--cyber-void);
+    background: var(--rgb-gradient);
+    background-size: 400% 100%;
+    animation: rgb-shift 2s linear infinite;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.error-msg {
+    color: var(--neon-laser);
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px var(--laser-glow);
+}
+
+/* 🌐 NEON HUD MAIN COCKPIT DASHBOARD GRID FRAMEWORK */
+.cyber-hud-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--sector-dark);
+    padding: 20px 40px;
+    border-bottom: 3px solid transparent;
+    border-image: var(--rgb-gradient) 1;
+    animation: rgb-shift 12s linear infinite;
+}
+
+.cyber-hud-nav h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--neon-cyber);
+    animation: glitch-text 3s infinite linear;
+}
+
+.cyber-btn-abort {
+    background: transparent;
+    color: var(--neon-laser);
+    border: 2px solid var(--neon-laser);
+    padding: 10px 22px;
+    font-family: inherit;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cyber-btn-abort:hover {
+    background: var(--neon-laser);
+    color: var(--text-pure);
+    box-shadow: 0 0 20px var(--neon-laser);
+    transform: rotate(-1deg);
+}
+
+.cyber-grid-container {
+    max-width: 1200px;
+    margin: 60px auto;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 45px;
+    padding: 0 20px;
+}
+
+.cyber-panel-sidebar {
+    background: var(--sector-dark);
+    padding: 45px 25px;
+    border: 2px solid var(--neon-laser);
+    box-shadow: 0 0 20px var(--laser-glow);
+    height: fit-content;
+    position: relative;
+}
+
+/* 🖼️ PROFILE HUD CARTRIDGE CHASSIS AREA */
+.neon-avatar-frame {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 30px auto;
+    border: 3px solid transparent;
+    border-image: var(--rgb-gradient) 1;
+    box-shadow: 0 0 25px var(--toxic-glow);
+    animation: rgb-shift 5s linear infinite;
+}
+
+.neon-avatar-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%) contrast(120%) brightness(90%);
+}
+
+.hud-identity-tag h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--text-pure);
+    text-shadow: 0 0 5px var(--cyber-glow);
+}
+
+.cyber-badge {
+    background-color: rgba(255, 0, 85, 0.1);
+    color: var(--neon-laser);
+    padding: 8px 18px;
+    border: 2px solid var(--neon-laser);
+    font-weight: 900;
+    font-size: 12px;
+    text-shadow: 0 0 8px var(--laser-glow);
+}
+
+/* 🗲 MATRIX STORAGE DATA NODES CONTROL CHASSIS */
+.cyber-panel-main {
+    background: var(--sector-dark);
+    padding: 45px;
+    border: 2px solid var(--neon-toxic);
+    box-shadow: 0 0 25px var(--toxic-glow);
+    position: relative;
+}
+
+.panel-header-glitch h3 {
+    margin-top: 0;
+    border-bottom: 2px dashed var(--neon-cyber);
+    padding-bottom: 20px;
+    color: var(--neon-toxic);
+    font-size: 22px;
+    font-weight: 900;
+    text-shadow: 0 0 10px var(--toxic-glow);
+}
+
+.cyber-matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.matrix-node {
+    font-size: 15px;
+    line-height: 1.8;
+    border-bottom: 1px solid #1c2333;
+    padding-bottom: 12px;
+    transition: background 0.2s ease;
+}
+
+.matrix-node:hover {
+    background: rgba(0, 240, 255, 0.03);
+}
+
+.matrix-node strong {
+    color: var(--neon-cyber);
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-shadow: 0 0 3px var(--cyber-glow);
+}
+
+/* HIGH PROFILE GLOW VALUES DISPLAY MODIFIERS */
+.neon-green-text {
+    font-weight: 900;
+    color: var(--neon-toxic);
+    font-size: 18px;
+    text-shadow: 0 0 12px var(--neon-toxic);
+}
+
+.neon-blue-text {
+    font-weight: 900;
+    color: var(--neon-cyber);
+    font-size: 18px;
+    text-shadow: 0 0 12px var(--neon-cyber);
+}
+
+/* Dynamic window scaling breakpoint filters handles */
+@media (max-width: 900px) {
+    .cyber-grid-container {
+        grid-template-columns: 1fr;
+    }
+    .cyber-matrix-grid {
+        grid-template-columns: 1fr;
+    }
+}

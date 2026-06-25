@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Secure Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Student Portal</h2>
+            <p>Enter your Roll Number and DOB to access records</p>
+        </div>
+        
+        <form id="studentLoginForm">
+            <div class="input-group">
+                <label for="loginRollNo">Roll Number</label>
+                <input type="text" id="loginRollNo" placeholder="e.g., 24AD010" required autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <label for="loginDob">Date of Birth</label>
+                <input type="date" id="loginDob" required>
+            </div>
+            
+            <button type="submit" class="btn">Verify & Enter</button>
+        </form>
+        
+        <p id="loginError" class="error-msg"></p>
+    </div>
+
+    <!-- Live Cloud Firebase Connection Engine -->
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getFirestore, doc, getDoc } from "https://gstatic.com";
+
+        // ✅ Your live verified Firebase Config keys pre-loaded
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
+            authDomain: "://firebaseapp.com",
+            projectId: "student-portal-406ac",
+            storageBucket: "student-portal-406ac.firebasestorage.app",
+            messagingSenderId: "9138034883",
+            appId: "1:9138034883:web:87ddbe10ba4cb4c730ea76",
+            measurementId: "G-5GZW2T36P4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('studentLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const errorElement = document.getElementById('loginError');
+            errorElement.innerText = ""; 
+
+            // Formats string input to uppercase automatically (e.g., 24ad010 -> 24AD010)
+            const inputRollNo = document.getElementById('loginRollNo').value.trim().toUpperCase();
+            const inputDob = document.getElementById('loginDob').value; 
+
+            try {
+                // Request a data snapshot file matching the exact Roll Number ID string
+                const docRef = doc(db, "students", inputRollNo);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const studentData = docSnap.data();
+
+                    // Validation Check: Does the typed DOB match the database string record?
+                    if (studentData.dob === inputDob) {
+                        // Success: Keep login tokens active in current tab session memory
+                        sessionStorage.setItem('isLoggedIn', 'true');
+                        sessionStorage.setItem('activeRollNo', inputRollNo);
+                        
+                        // Push window routing context to the dashboard layout file
+                        window.location.href = 'student-dashboard.html';
+                    } else {
+                        errorElement.innerText = "Access Denied: Incorrect Date of Birth.";
+                    }
+                } else {
+                    errorElement.innerText = "Access Denied: Roll Number not found.";
+                }
+            } catch (err) {
+                errorElement.innerText = "Connection timeout gateway error: " + err.message;
+            }
+        });
+    </script>
+</body>
+</html>
