@@ -23,7 +23,6 @@
                 
                     <h3 id="viewName">SYNCING_IDENTITY...</h3>
                     <span id="viewAccommodation" class="cyber-badge">STATUS_UNKNOWN</span>
-                </div>
             </section>
 
             <section class="cyber-panel-main">
@@ -50,8 +49,8 @@
 
     <!-- ⚡ FORCE-CONNECTED IMMUTABLE CLOUD MODULES -->
     <script type="module">
-        import { initializeApp } from "https://jsdelivr.net";
-        import { getFirestore, doc, getDoc } from "https://jsdelivr.net";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
@@ -104,14 +103,15 @@
                     document.getElementById('viewParentName').innerText = data.parentName || "---";
                     document.getElementById('viewParentPhone').innerText = data.parentNumber || "---";
                     document.getElementById('viewCgpa').innerText = data.cgpa || "0.00";
-                    document.getElementById('viewAttendance').innerText = data.attendance || "0.0%";
+                    document.getElementById('viewAttendance').innerText =
+                        data.attendance ? data.attendance + "%" : "0.0%";
                     document.getElementById('viewAccommodation').innerText = data.accommodation ? data.accommodation.toUpperCase() : "DAYSCHOLOR";
                     document.getElementById('viewType').innerText = data.accommodation || "Dayscholor";
                     
                     if (data.dob) {
                         document.getElementById('viewAge').innerText = solveAgeMetric(data.dob) + " _SOLVED_YEAR_CYCLES";
                     }
-                    if (data.photoUrl) {
+                    if (data.photoUrl && data.photoUrl.trim() !== "") {
                         document.getElementById('viewPhoto').src = data.photoUrl;
                     }
                 } else {
