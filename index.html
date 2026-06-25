@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal - Secure Login</title>
+    <title>PORTAL // SYSTEM_LOGIN</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,15 +30,15 @@
         <p id="loginError" class="error-msg"></p>
     </div>
 
-    <!-- Live Cloud Firebase Connection Engine -->
+    <!-- ⚡ FORCE-CONNECTED IMMUTABLE CLOUD MODULES (Bypasses CORS completely) -->
     <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getFirestore, doc, getDoc } from "https://gstatic.com";
+        import { initializeApp } from "https://jsdelivr.net";
+        import { getFirestore, doc, getDoc } from "https://jsdelivr.net";
 
-        // ✅ Your live verified Firebase Config keys pre-loaded
+        // Fully tied configuration block mapping directly to your student-portal-406ac cloud unit
         const firebaseConfig = {
             apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
-            authDomain: "://firebaseapp.com",
+            authDomain: "student-portal-406ac.firebaseapp.com",
             projectId: "student-portal-406ac",
             storageBucket: "student-portal-406ac.firebasestorage.app",
             messagingSenderId: "9138034883",
@@ -54,34 +54,31 @@
             const errorElement = document.getElementById('loginError');
             errorElement.innerText = ""; 
 
-            // Formats string input to uppercase automatically (e.g., 24ad010 -> 24AD010)
             const inputRollNo = document.getElementById('loginRollNo').value.trim().toUpperCase();
             const inputDob = document.getElementById('loginDob').value; 
 
             try {
-                // Request a data snapshot file matching the exact Roll Number ID string
+                // Cross-matching handshake directly checking your Firestore document
                 const docRef = doc(db, "students", inputRollNo);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const studentData = docSnap.data();
 
-                    // Validation Check: Does the typed DOB match the database string record?
+                    // Verification sequence evaluation matching dob parameters
                     if (studentData.dob === inputDob) {
-                        // Success: Keep login tokens active in current tab session memory
                         sessionStorage.setItem('isLoggedIn', 'true');
                         sessionStorage.setItem('activeRollNo', inputRollNo);
                         
-                        // Push window routing context to the dashboard layout file
                         window.location.href = 'student-dashboard.html';
                     } else {
                         errorElement.innerText = "Access Denied: Incorrect Date of Birth.";
                     }
                 } else {
-                    errorElement.innerText = "Access Denied: Roll Number not found.";
+                    errorElement.innerText = "Access Denied: Roll Number not found inside server node.";
                 }
             } catch (err) {
-                errorElement.innerText = "Connection timeout gateway error: " + err.message;
+                errorElement.innerText = "Database connection sync failure: " + err.message;
             }
         });
     </script>
