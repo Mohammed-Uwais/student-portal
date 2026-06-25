@@ -31,56 +31,57 @@
     </div>
 
     <!-- ⚡ FORCE-CONNECTED IMMUTABLE CLOUD MODULES (Bypasses CORS completely) -->
-    <script type="module">
-        import { initializeApp } from "https://jsdelivr.net";
-        import { getFirestore, doc, getDoc } from "https://jsdelivr.net";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-        // Fully tied configuration block mapping directly to your student-portal-406ac cloud unit
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
-            authDomain: "student-portal-406ac.firebaseapp.com",
-            projectId: "student-portal-406ac",
-            storageBucket: "student-portal-406ac.firebasestorage.app",
-            messagingSenderId: "9138034883",
-            appId: "1:9138034883:web:87ddbe10ba4cb4c730ea76",
-            measurementId: "G-5GZW2T36P4"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
+        authDomain: "student-portal-406ac.firebaseapp.com",
+        projectId: "student-portal-406ac",
+        storageBucket: "student-portal-406ac.firebasestorage.app",
+        messagingSenderId: "9138034883",
+        appId: "1:9138034883:web:87ddbe10ba4cb4c730ea76",
+        measurementId: "G-5GZW2T36P4"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        document.getElementById('studentLoginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const errorElement = document.getElementById('loginError');
-            errorElement.innerText = ""; 
+    document.getElementById('studentLoginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-            const inputRollNo = document.getElementById('loginRollNo').value.trim().toUpperCase();
-            const inputDob = document.getElementById('loginDob').value; 
+        const errorElement = document.getElementById('loginError');
+        errorElement.innerText = "";
 
-            try {
-                // Cross-matching handshake directly checking your Firestore document
-                const docRef = doc(db, "students", inputRollNo);
-                const docSnap = await getDoc(docRef);
+        const inputRollNo = document.getElementById('loginRollNo').value.trim().toUpperCase();
+        const inputDob = document.getElementById('loginDob').value;
 
-                if (docSnap.exists()) {
-                    const studentData = docSnap.data();
+        try {
+            const docRef = doc(db, "students", inputRollNo);
+            const docSnap = await getDoc(docRef);
 
-                    // Verification sequence evaluation matching dob parameters
-                    if (studentData.dob === inputDob) {
-                        sessionStorage.setItem('isLoggedIn', 'true');
-                        sessionStorage.setItem('activeRollNo', inputRollNo);
-                        
-                        window.location.href = 'student-dashboard.html';
-                    } else {
-                        errorElement.innerText = "Access Denied: Incorrect Date of Birth.";
-                    }
-                } else {
-                    errorElement.innerText = "Access Denied: Roll Number not found inside server node.";
-                }
-            } catch (err) {
-                errorElement.innerText = "Database connection sync failure: " + err.message;
+            if (!docSnap.exists()) {
+                errorElement.innerText = "Roll Number not found";
+                return;
             }
-        });
+
+            const studentData = docSnap.data();
+
+            if (studentData.dob === inputDob) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('activeRollNo', inputRollNo);
+
+                window.location.href = 'student-dashboard.html';
+            } else {
+                errorElement.innerText = "Incorrect Date of Birth";
+            }
+
+        } catch (err) {
+            console.error(err);
+            errorElement.innerText = "Error: " + err.message;
+        }
+    });
     </script>
 </body>
 </html>
