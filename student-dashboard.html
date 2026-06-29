@@ -3,54 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORTAL // ACCESS_GRANTED</title>
+    <title>Student Portal | Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="cyber-wrapper">
-        <header class="cyber-hud-nav">
-            <div class="hud-logo">
-                <h2>CORE_SYS // STUDENT_VERIFICATION</h2>
-            </div>
-            <button id="logoutBtn" class="cyber-btn-abort">DISCONNECT_SESSION</button>
+    <div class="dashboard-wrapper">
+        
+        <header class="glass-panel dash-header">
+            <h2>🎓 Student Information System</h2>
+            <div class="time-display">🕒 <span id="liveClock">Loading...</span></div>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
         </header>
 
-        <main class="cyber-grid-container">
-            <section class="cyber-panel-sidebar">
-                <div class="neon-avatar-frame">
-                    <img id="viewPhoto" src="https://placeholder.com" alt="System Profile Core">
+        <section class="top-section">
+            
+            <div class="glass-panel profile-card">
+                <div class="avatar-wrapper">
+                    <img id="viewPhoto" src="https://via.placeholder.com/150" alt="Student Photo">
                 </div>
-                
-                    <h3 id="viewName">SYNCING_IDENTITY...</h3>
-                    <span id="viewAccommodation" class="cyber-badge">STATUS_UNKNOWN</span>
-            </section>
+                <h3 class="profile-name" id="viewName">Loading...</h3>
+                <p class="profile-dept">AI & Data Science</p> <span class="badge" id="viewAccommodation">Loading...</span>
+            </div>
 
-            <section class="cyber-panel-main">
-                <div class="panel-header-glitch">
-                    <h3>RESPECTIVE_DATA_NODES_MATRIX</h3>
+            <div class="stats-grid">
+                <div class="glass-panel stat-box">
+                    <span class="stat-label">CGPA</span>
+                    <span class="stat-value" id="viewCgpa">--</span>
                 </div>
-                <div class="cyber-matrix-grid">
-                    <div class="matrix-node"><strong>FULL_NAME_STRING:</strong> <span id="viewFullName">LOADING...</span></div>
-                    <div class="matrix-node"><strong>ROLL_CORE_ID:</strong> <span id="viewRollNo">LOADING...</span></div>
-                    <div class="matrix-node"><strong>REGISTRATION_SERIAL:</strong> <span id="viewRegNo">LOADING...</span></div>
-                    <div class="matrix-node"><strong>DATE_OF_BIRTH:</strong> <span id="viewDob">LOADING...</span></div>
-                    <div class="matrix-node"><strong>DYNAMIC_COMPUTED_AGE:</strong> <span id="viewAge" class="neon-blue-text">LOADING...</span></div>
-                    <div class="matrix-node"><strong>COMM_PHONE_LINE:</strong> <span id="viewPhone">LOADING...</span></div>
-                    <div class="matrix-node"><strong>CURRENT_METRIC_CGPA:</strong> <span id="viewCgpa" class="neon-green-text">LOADING...</span></div>
-                    <div class="matrix-node"><strong>ATTENDANCE_DUTY_RATE:</strong> <span id="viewAttendance" class="neon-green-text">LOADING...</span></div>
-                    <div class="matrix-node"><strong>ACCOMMODATION_CLASS:</strong> <span id="viewType">LOADING...</span></div>
-                    <div class="matrix-node"><strong>RESIDENTIAL_GEO_ADDRESS:</strong> <span id="viewAddress">LOADING...</span></div>
-                    <div class="matrix-node"><strong>PARENT_GUARDIAN_NAME:</strong> <span id="viewParentName">LOADING...</span></div>
-                    <div class="matrix-node"><strong>PARENT_CONTACT_HOTLINE:</strong> <span id="viewParentPhone">LOADING...</span></div>
+                <div class="glass-panel stat-box">
+                    <span class="stat-label">Attendance</span>
+                    <span class="stat-value" id="viewAttendance">--</span>
                 </div>
-            </section>
-        </main>
+                <div class="glass-panel stat-box">
+                    <span class="stat-label">Age</span>
+                    <span class="stat-value" id="viewAge">--</span>
+                </div>
+                <div class="glass-panel stat-box">
+                    <span class="stat-label">DOB</span>
+                    <span class="stat-value" id="viewDobHeader">--</span>
+                </div>
+            </div>
+            
+        </section>
+
+        <section class="glass-panel details-card">
+            <h3 class="section-title">Student Information</h3>
+            <ul class="info-list">
+                <li class="info-item">
+                    <span class="info-label">👤 Full Name</span>
+                    <span class="info-value" id="viewFullName">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">🆔 Roll Number</span>
+                    <span class="info-value" id="viewRollNo">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">🎓 Register No</span>
+                    <span class="info-value" id="viewRegNo">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">📞 Phone Number</span>
+                    <span class="info-value" id="viewPhone">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">👨 Parent Name</span>
+                    <span class="info-value" id="viewParentName">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">📱 Parent Phone</span>
+                    <span class="info-value" id="viewParentPhone">--</span>
+                </li>
+                <li class="info-item">
+                    <span class="info-label">🏠 Address</span>
+                    <span class="info-value" id="viewAddress">--</span>
+                </li>
+            </ul>
+        </section>
+
     </div>
 
-    <!-- ⚡ FORCE-CONNECTED IMMUTABLE CLOUD MODULES -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+        // Live Clock Function
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
@@ -76,6 +118,13 @@
             return solvedAge;
         }
 
+        // Format Date to looks like "08 Sep 2007"
+        function formatDate(dateString) {
+            if(!dateString) return "---";
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-GB', options);
+        }
+
         document.addEventListener('DOMContentLoaded', async function() {
             const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             const activeRollNo = sessionStorage.getItem('activeRollNo');
@@ -92,24 +141,24 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
 
-                    // Maps fields values directly onto UI tokens placeholders
-                    document.getElementById('viewName').innerText = data.fullName ? data.fullName.toUpperCase() : "---";
+                    // Maps fields values directly onto UI tokens
+                    document.getElementById('viewName').innerText = data.fullName || "---";
                     document.getElementById('viewFullName').innerText = data.fullName || "---";
                     document.getElementById('viewRegNo').innerText = data.regNo || "---";
                     document.getElementById('viewRollNo').innerText = activeRollNo;
-                    document.getElementById('viewDob').innerText = data.dob || "---";
+                    
+                    document.getElementById('viewDobHeader').innerText = formatDate(data.dob);
+                    
                     document.getElementById('viewPhone').innerText = data.phoneNumber || "---";
                     document.getElementById('viewAddress').innerText = data.address || "---";
                     document.getElementById('viewParentName').innerText = data.parentName || "---";
                     document.getElementById('viewParentPhone').innerText = data.parentNumber || "---";
                     document.getElementById('viewCgpa').innerText = data.cgpa || "0.00";
-                    document.getElementById('viewAttendance').innerText =
-                        data.attendance ? data.attendance + "%" : "0.0%";
-                    document.getElementById('viewAccommodation').innerText = data.accommodation ? data.accommodation.toUpperCase() : "DAYSCHOLOR";
-                    document.getElementById('viewType').innerText = data.accommodation || "Dayscholor";
+                    document.getElementById('viewAttendance').innerText = data.attendance ? data.attendance + "%" : "0%";
+                    document.getElementById('viewAccommodation').innerText = data.accommodation || "Day Scholar";
                     
                     if (data.dob) {
-                        document.getElementById('viewAge').innerText = solveAgeMetric(data.dob) + " _SOLVED_YEAR_CYCLES";
+                        document.getElementById('viewAge').innerText = solveAgeMetric(data.dob) + " Years";
                     }
                     if (data.photoUrl && data.photoUrl.trim() !== "") {
                         document.getElementById('viewPhoto').src = data.photoUrl;
