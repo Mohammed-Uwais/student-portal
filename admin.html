@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel | Student System</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-section { display: none; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: white; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--glass-border); text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <div id="loginGate" class="glass-panel login-container">
+            <h2>ADMIN ACCESS</h2>
+            <div class="input-group"><input type="text" id="adminUser" placeholder="Admin No"></div>
+            <div class="input-group"><input type="password" id="adminPass" placeholder="Password"></div>
+            <button class="btn" onclick="verifyAdmin()">VERIFY ACCESS</button>
+        </div>
+
+        <div id="adminPanel" class="admin-section glass-panel">
+            <header class="dash-header">
+                <div class="header-top">
+                    <h2>CONTROL CENTER</h2>
+                    <button class="btn-logout-small" onclick="logout()">LOGOUT</button>
+                </div>
+
+                <div class="button-stack">
+                    <button id="logoutBtn" class="btn-logout" onclick="showAction('create')">CREATE</button>
+                    <button id="logoutBtn" class="btn-logout" onclick="showAction('read')">READ</button>
+                    <button id="logoutBtn" class="btn-logout" onclick="showAction('update')">UPDATE</button>
+                    <button id="logoutBtn" class="btn-logout" onclick="showAction('delete')">DELETE</button>
+                </div>
+            </header>
+            <div id="actionArea"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyB_tyQr722blDSsbcHYZrlIgB-kXfb309M",
+            authDomain: "student-portal-406ac.firebaseapp.com",
+            projectId: "student-portal-406ac",
+            storageBucket: "student-portal-406ac.firebasestorage.app",
+            messagingSenderId: "9138034883",
+            appId: "1:9138034883:web:87ddbe10ba4cb4c730ea76",
+            measurementId: "G-5GZW2T36P4"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(); 
+
+        window.verifyAdmin = () => {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+
+            signInWithEmailAndPassword(auth, user, pass)
+                .then((userCredential) => {
+                    // SUCCESS
+                    document.getElementById('loginGate').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    console.log("Access Granted for:", userCredential.user.email);
+                })
+                .catch((error) => {
+                    // FAIL
+                    alert("Invalid Credentials: " + error.message);
+                });
+        };
+
+
+        window.commit = async (type) => {
+            // 1. Identify the Roll No
+            const roll = document.getElementById('rollNo') ? document.getElementById('rollNo').value : document.getElementById('delRoll').value;
+            
+            if (!roll) {
+                alert("Error: Roll Number is required!");
+                return;
+            }
+
+            try {
+                if (type === 'create') {
+                    // Collect all fields
+                    const ref = doc(db, "students", roll);
+                    const checkSnap = await getDoc(ref);
+                    
+                    if (checkSnap.exists()) {
+                        alert(`Error: A student with Roll No "${roll}" already exists! Data overlap blocked.`);
+                        return; // Stops execution immediately so old data is NOT overwritten
+                    }
+                    const data = {
+                        accommodation: document.getElementById('accommodation').value,
+                        address: document.getElementById('address').value,
+                        attendance: parseFloat(document.getElementById('attendance').value) || 0,
+                        cgpa: parseFloat(document.getElementById('cgpa').value) || 0,
+                        dob: document.getElementById('dob').value,
+                        fullName: document.getElementById('fullName').value,
+                        parentName: document.getElementById('parentName').value,
+                        parentNumber: document.getElementById('parentNumber').value,
+                        phoneNumber: document.getElementById('phoneNumber').value,
+                        photoUrl: document.getElementById('photoUrl').value,
+                        regNo: document.getElementById('regNo').value
+                    };
+
+                    if (data.regNo.length !== 12 || isNaN(data.regNo)) {
+                        alert("Error: REG must be 12 digits");
+                        return;
+                    }
+                    if (data.cgpa < 0 || data.cgpa > 10 || isNaN(data.cgpa)) {
+                        alert("Error: CGPA range is 0 to 10");
+                        return;
+                    }
+                    if (data.attendance < 0 || data.attendance > 100 || isNaN(data.attendance)) {
+                        alert("Error: Attendance range is 0 to 100");
+                        return;
+                    }
+                    if (data.accommodation !== 'Dayscholar' && data.accommodation !== 'Hosteler') {
+                        alert("Error: Accomodation is Either Dayscholar and Hosteler");
+                        return;
+                    }
+                    if (data.phoneNumber.length !== 10 || isNaN(data.phoneNumber)) {
+                        alert("Error: phone number must be 10 digits");
+                        return;
+                    }
+                    if (data.parentNumber.length !== 10 || isNaN(data.parentNumber)) {
+                        alert("Error: parent number must be 10 digits");
+                        return;
+                    }
+                    
+                    // Send to Firestore
+                    await setDoc(doc(db, "students", roll), data);
+                    window.clearFormFields();
+                    alert("Success: Student record created!");
+                } 
+                else if (type === 'update') {
+                    const updateData = {};
+                    const fields = ['fullName', 'regNo', 'dob', 'cgpa', 'attendance', 'accommodation', 'address', 'parentName', 'parentNumber', 'phoneNumber', 'photoUrl'];
+                    
+                    fields.forEach(f => {
+                        let val = document.getElementById(f).value;
+                        if (val !== "") {
+                            updateData[f] = (f === 'cgpa' || f === 'attendance') ? parseFloat(val) : val;
+                        }
+                    });
+
+                    if (updateData.regNo !== undefined && (updateData.regNo.length !== 12 || isNaN(updateData.regNo))) {
+                        alert("Error: REG must be 12 digits");
+                        return;
+                    }
+                    if (updateData.cgpa !== undefined && (updateData.cgpa < 0 || updateData.cgpa > 10 || isNaN(updateData.cgpa))) {
+                        alert("Error: CGPA range is 0 to 10");
+                        return;
+                    }
+                    if (updateData.attendance !== undefined && (updateData.attendance < 0 || updateData.attendance > 100 || isNaN(updateData.attendance))) {
+                        alert("Error: Attendance range is 0 to 100");
+                        return;
+                    }
+                    if (updateData.accommodation !== undefined && updateData.accommodation !== 'Dayscholar' && updateData.accommodation !== 'Hosteler') {
+                        alert("Error: Accomodation is Either Dayscholar and Hosteler");
+                        return;
+                    }
+                    if (updateData.phoneNumber !== undefined && (updateData.phoneNumber.length !== 10 || isNaN(updateData.phoneNumber))) {
+                        alert("Error: phone number must be 10 digits");
+                        return;
+                    }
+                    if (updateData.parentNumber !== undefined && (updateData.parentNumber.length !== 10 || isNaN(updateData.parentNumber))) {
+                        alert("Error: parent number must be 10 digits");
+                        return;
+                    }
+
+                    await updateDoc(doc(db, "students", roll), updateData);
+                    window.clearFormFields();
+                    alert("Success: Record updated!");
+                }
+                else if (type === 'delete') {
+                    const dob = document.getElementById('delDob').value;
+                    const ref = doc(db, "students", roll);
+                    const snap = await getDoc(ref);
+                    
+                    if(snap.exists() && snap.data().dob === dob) {
+                        await deleteDoc(ref);
+                        window.clearFormFields();
+                        alert("Success: Record deleted!");
+                    } else {
+                        alert("Error: Verification failed. Check Roll No and DOB.");
+                    }
+                }
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                alert("Error: " + error.message);
+            }
+        };
+        // UPDATED: Completely clears the workspace area container on success
+        window.clearFormFields = () => {
+            const area = document.getElementById('actionArea');
+            if (area) {
+                // This completely wipes out the active form tracks and elements from the layout
+                area.innerHTML = ''; 
+            }
+        };
+
+
+        window.logout = () => {
+            const auth = getAuth();
+            signOut(auth).then(() => {
+                // Reload the page to reset the state back to the login screen
+                location.reload();
+            }).catch((error) => {
+                alert("Logout failed: " + error.message);
+            });
+        };
+        // CRUD UI GENERATOR
+        window.showAction = (type) => {
+            const area = document.getElementById('actionArea');
+            if (type === 'create' || type === 'update') {
+                area.innerHTML = `<h3>${type.toUpperCase()} STUDENT</h3>
+                    <div class="form-grid">
+                        <input id="rollNo" placeholder="Roll No">
+                        <input id="fullName" placeholder="Full Name">
+                        <input id="regNo" placeholder="Reg No">
+                        <input id="dob" type="date">
+                        <input id="cgpa" placeholder="CGPA" type="number">
+                        <input id="attendance" placeholder="Attendance" type="number">
+                        <select id="accommodation">
+                            <option value="" disabled selected hidden>Accommodation</option>
+                            <option value="Dayscholar">Dayscholar</option>
+                            <option value="Hosteler">Hosteler</option>
+                        </select>
+                        <input id="address" placeholder="Address">
+                        <input id="parentName" placeholder="Parent Name">
+                        <input id="parentNumber" placeholder="Parent Number">
+                        <input id="phoneNumber" placeholder="Phone Number">
+                        <input id="photoUrl" placeholder="Photo URL">
+                    </div>
+                    <button class="btn" onclick="commit('${type}')">COMMIT ${type.toUpperCase()}</button>`;
+            } else if (type === 'read') {
+                area.innerHTML = `<table id="studentTable"><thead><tr><th>Roll No</th><th>Name</th></tr></thead><tbody></tbody></table>`;
+                getDocs(collection(db, "students")).then(snap => {
+                    snap.forEach(doc => {
+                        document.querySelector('#studentTable tbody').innerHTML += `<tr><td>${doc.id}</td><td>${doc.data().fullName}</td></tr>`;
+                    });
+                });
+            } else if (type === 'delete') {
+                area.innerHTML = `<h3>DELETE RECORD</h3>
+                    <div class="form-grid">
+                        <input id="delRoll" placeholder="Roll No">
+                        <input id="delDob" placeholder="DOB (YYYY-MM-DD)">
+                    </div>
+                    <button class="btn" onclick="commit('delete')">DELETE RECORD</button>`;
+            }
+        };
+
+    </script>
+</body>
+</html>
