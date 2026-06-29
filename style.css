@@ -1,162 +1,346 @@
-/* 🤖 CORE MATRIX DEFINITIONS & ANIMATIONS */
 :root {
-    --cyber-void: #020204;
-    --sector-dark: #05060b;
-    --neon-toxic: #00ff66;
-    --neon-cyber: #00f0ff;
-    --neon-laser: #ff0055;
-    --rgb-gradient: linear-gradient(90deg, #ff0055, #00f0ff, #00ff66, #ff0055);
-    --toxic-glow: rgba(0, 255, 102, 0.4);
-    --cyber-glow: rgba(0, 240, 255, 0.4);
-    --laser-glow: rgba(255, 0, 85, 0.4);
-    --text-terminal: #ffffff;
-    --text-dim: #5c6479;
+    /* 🌌 Deep Space Core Palette */
+    --bg-dark: #05070a; 
+    --bg-gradient: linear-gradient(135deg, #05070a 0%, #0f172a 100%);
+    
+    /* Glass Layering */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(0, 242, 255, 0.15); /* Electric Cyan border */
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    
+    /* Typography */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    /* Accents */
+    --accent-blue: #771481; /* Electric Cyan */
+    --accent-blue-hover: #00c4cf;
+    --success-green: #64ffda; /* Mint Green for stats */
+    --card-radius: 20px;
 }
 
 body {
-    background-color: var(--cyber-void);
-    color: var(--text-terminal);
-    font-family: 'Courier New', Courier, monospace;
-    letter-spacing: 2px;
+    background-color: var(--bg-dark);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* 💀 OVERLAY GLITCH SCANLINE MATRIX EFFECT */
-body::before {
-    content: " ";
-    display: block;
-    position: fixed;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 99999;
-    background-size: 100% 4px, 6px 100%;
-    pointer-events: none;
+/* 🪟 GLASS UTILITY CLASS */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--card-radius);
+    box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.05), var(--glass-shadow);
 }
 
-/* 🕹️ CHROMATIC RGB MARQUEE ANIMATION FRAMEWORK */
-@keyframes rgb-shift {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 400% 50%; }
+/* 📐 LAYOUT CONTAINERS */
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    padding: 40px 20px;
+    box-sizing: border-box;
 }
 
-@keyframes terminal-pulse {
-    0% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
-    50% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.5); }
-    100% { box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+/* 🕒 HEADER */
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 30px;
+    border-radius: 16px;
+}s
+
+.dash-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
-@keyframes glitch-text {
-    0% { text-shadow: 2px -1px var(--neon-laser), -2px 1px var(--neon-cyber); }
-    50% { text-shadow: -2px 2px var(--neon-laser), 2px -2px var(--neon-toxic); }
-    100% { text-shadow: 1px -2px var(--neon-cyber), -1px 2px var(--neon-laser); }
+.time-display {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+    font-size: 15px;
 }
 
-/* ⚡ SECURE ENTRY TERMINAL (LOGIN) */
+.btn-logout {
+    background: rgba(255, 59, 48, 0.1);
+    color: #ff453a;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: #ff453a;
+    color: #fff;
+}
+
+/* 📊 TOP SECTION: PROFILE & STATS */
+.top-section {
+    display: grid;
+    /* This makes the profile take 25% and the stats take 75% */
+    grid-template-columns: 350px 1fr; 
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+/* PROFILE CARD */
+.profile-card {
+    padding: 30px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-wrapper {
+    width: 200px; /* Increased from 120px */
+    height: 200px; /* Increased from 120px */
+    border-radius: 20px; /* Changed from 50% to a slightly rounded square for a modern look */
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 4px solid var(--glass-border); /* Slightly thicker border */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-name {
+    margin: 0 0 5px 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.profile-dept {
+    color: var(--text-secondary);
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+
+.badge {
+    background: rgba(10, 132, 255, 0.15);
+    color: var(--accent-blue-hover);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid rgba(10, 132, 255, 0.3);
+}
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: transform 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* 📋 BOTTOM SECTION: LIST DETAILS */
+.details-card {
+    padding: 30px;
+}
+
+.section-title {
+    margin: 0 0 25px 0;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: background 0.2s;
+}
+
+.info-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.info-value {
+    font-weight: 600;
+    font-size: 15px;
+    text-align: right;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .top-section {
+        grid-template-columns: 1fr;
+    }
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .info-value {
+        text-align: left;
+        padding-left: 25px;
+    }
+}
+/* 🔐 LOGIN SPECIFIC STYLES */
 .login-container {
-    max-width: 440px;
-    margin: 100px auto;
-    background-color: var(--sector-dark);
-    padding: 45px;
-    border: 3px solid transparent;
-    border-image: var(--rgb-gradient) 1;
-    background-clip: padding-box;
-    position: relative;
-    animation: rgb-shift 8s linear infinite, terminal-pulse 4s infinite ease-in-out;
+    max-width: 420px;
+    width: 90%;                     /* Makes it responsive on mobile screens */
+    margin: 15vh auto;              /* Centers it vertically and horizontally */
+    padding: 40px 35px;             /* Bumper space inside the box container */
+    box-sizing: border-box;
+    text-align: center;
+    background: var(--glass-bg);    /* Transparent glass texture backdrop */
+    backdrop-filter: blur(20px);    /* Apple blur effect */
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); /* Sleek electric line border outline */
+    border-radius: var(--card-radius);     /* Matches your theme corner curves */
+    box-shadow: var(--glass-shadow);       /* Deep space drop shadow elevation */
 }
 
-.login-container::before {
-    content: "[ CORE_SYS // UNAUTHORIZED_PROBE_DETECTED ]";
-    display: block;
-    position: absolute;
-    top: -15px;
-    left: 15px;
-    background: var(--cyber-void);
-    color: var(--neon-laser);
-    font-size: 11px;
-    padding: 2px 8px;
-    font-weight: bold;
-    border: 1px solid var(--neon-laser);
-    animation: glitch-text 1s infinite linear;
+.login-header {
+    margin-bottom: 30px;
 }
 
 .login-header h2 {
-    color: var(--neon-toxic);
-    margin: 0 0 8px 0;
-    font-size: 28px;
-    font-weight: 900;
-    text-transform: uppercase;
-    animation: glitch-text 2s infinite steps(2);
+    margin: 0 0 10px 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .login-header p {
-    color: var(--text-dim);
-    font-size: 11px;
-    margin: 0 0 35px 0;
-    text-transform: uppercase;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0 0 25px 0;
+    line-height: 1.4;
 }
 
 .input-group {
-    margin-bottom: 30px;
-    position: relative;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 12px;
-    color: var(--neon-cyber);
-    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 600;
 }
 
 .input-group input {
     width: 100%;
-    padding: 15px;
-    background: #020306;
-    border: 2px solid var(--text-dim);
-    color: var(--text-pure);
-    font-size: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
     font-family: inherit;
+    font-size: 15px;
     box-sizing: border-box;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 }
 
 .input-group input:focus {
-    border-color: var(--neon-cyber);
-    color: var(--neon-cyber);
     outline: none;
-    box-shadow: 0 0 20px var(--cyber-glow);
+    border-color: var(--accent-blue);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
 }
 
-/* 🔥 RGB ACTION INITIATOR CONTROL TRIGGER BUTTON */
+/* Fixes the date picker calendar icon visibility on dark backgrounds */
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+}
+
 .btn {
     width: 100%;
-    padding: 16px;
-    background: transparent;
-    color: var(--text-pure);
-    font-weight: 900;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
     font-size: 16px;
-    font-family: inherit;
-    text-transform: uppercase;
-    border: 3px solid transparent;
-    border-image: var(--rgb-gradient) 1;
+    font-weight: 600;
     cursor: pointer;
-    position: relative;
-    z-index: 1;
-    transition: transform 0.1s ease;
-    animation: rgb-shift 6s linear infinite;
+    transition: background 0.2s ease, transform 0.1s ease;
+    margin-top: 10px;
 }
 
 .btn:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
-    color: var(--cyber-void);
-    background: var(--rgb-gradient);
-    background-size: 400% 100%;
-    animation: rgb-shift 2s linear infinite;
+    background: var(--accent-blue-hover);
 }
 
 .btn:active {
@@ -164,175 +348,205 @@ body::before {
 }
 
 .error-msg {
-    color: var(--neon-laser);
-    font-weight: bold;
-    text-align: center;
-    margin-top: 25px;
-    font-size: 12px;
-    text-transform: uppercase;
-    text-shadow: 0 0 8px var(--laser-glow);
+    color: #ff453a; /* iOS Red */
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 20px;
+}
+/* 🛠 ADMIN PANEL DESIGN OVERRIDES */
+#adminPanel {
+    max-width: 800px;
+    margin: 20px auto; /* Centers the panel on the page */
 }
 
-/* 🌐 NEON HUD MAIN COCKPIT DASHBOARD GRID FRAMEWORK */
-.cyber-hud-nav {
+.control-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px;
+    border-radius: 16px;
+    margin-top: 20px;
+    border: 1px solid var(--glass-border);
+}
+
+.form-grid input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+}
+
+.form-grid input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 8px rgba(0, 242, 255, 0.2);
+}
+
+.admin-btn-action {
+    background: var(--accent-blue);
+    color: #000;
+    font-weight: 700;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.admin-btn-action:hover {
+    background: var(--accent-blue-hover);
+}
+
+/* Center the button group */
+.admin-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+/* Ensure buttons match your "Verify" button size */
+.admin-controls button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Custom Message Box inside the website */
+#statusMessage {
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 5px;
+    display: none;
+    text-align: center;
+}
+
+/* --- ADMIN PANEL SCOPED STYLES --- */
+
+#adminPanel .dash-header {
+    display: flex;
+    flex-direction: column; /* Vertical stack for Title + Buttons */
+    align-items: center; /* Aligns items to the left */
+    gap: 20px;
+    padding: 25px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+#adminPanel .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--sector-dark);
-    padding: 20px 40px;
-    border-bottom: 3px solid transparent;
-    border-image: var(--rgb-gradient) 1;
-    animation: rgb-shift 12s linear infinite;
-}
-
-.cyber-hud-nav h2 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 900;
-    color: var(--neon-cyber);
-    animation: glitch-text 3s infinite linear;
-}
-
-.cyber-btn-abort {
-    background: transparent;
-    color: var(--neon-laser);
-    border: 2px solid var(--neon-laser);
-    padding: 10px 22px;
-    font-family: inherit;
-    font-weight: 900;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.cyber-btn-abort:hover {
-    background: var(--neon-laser);
-    color: var(--text-pure);
-    box-shadow: 0 0 20px var(--neon-laser);
-    transform: rotate(-1deg);
-}
-
-.cyber-grid-container {
-    max-width: 1200px;
-    margin: 60px auto;
-    display: grid;
-    grid-template-columns: 340px 1fr;
-    gap: 45px;
-    padding: 0 20px;
-}
-
-.cyber-panel-sidebar {
-    background: var(--sector-dark);
-    padding: 45px 25px;
-    border: 2px solid var(--neon-laser);
-    box-shadow: 0 0 20px var(--laser-glow);
-    height: fit-content;
-    position: relative;
-}
-
-/* 🖼️ PROFILE HUD CARTRIDGE CHASSIS AREA */
-.neon-avatar-frame {
-    width: 180px;
-    height: 180px;
-    margin: 0 auto 30px auto;
-    border: 3px solid transparent;
-    border-image: var(--rgb-gradient) 1;
-    box-shadow: 0 0 25px var(--toxic-glow);
-    animation: rgb-shift 5s linear infinite;
-}
-
-.neon-avatar-frame img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(30%) contrast(120%) brightness(90%);
+    margin-bottom: 20px; /* Space before the line */
+    padding-bottom: 20px; /* Space after the line */
+    border-bottom: 1px solid var(--glass-border); /* The separator line */
 }
 
-.hud-identity-tag h3 {
-    margin: 0 0 15px 0;
-    font-size: 18px;
-    font-weight: 900;
-    color: var(--text-pure);
-    text-shadow: 0 0 5px var(--cyber-glow);
-}
-
-.cyber-badge {
-    background-color: rgba(255, 0, 85, 0.1);
-    color: var(--neon-laser);
-    padding: 8px 18px;
-    border: 2px solid var(--neon-laser);
-    font-weight: 900;
+/* Specific styling for the small logout button */
+.btn-logout-small {
+    background: rgba(255, 59, 48, 0.1);
+    color: #ff453a;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
     font-size: 12px;
-    text-shadow: 0 0 8px var(--laser-glow);
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-/* 🗲 MATRIX STORAGE DATA NODES CONTROL CHASSIS */
-.cyber-panel-main {
-    background: var(--sector-dark);
-    padding: 45px;
-    border: 2px solid var(--neon-toxic);
-    box-shadow: 0 0 25px var(--toxic-glow);
-    position: relative;
+.btn-logout-small:hover {
+    background: #ff453a;
+    color: #fff;
 }
 
-.panel-header-glitch h3 {
-    margin-top: 0;
-    border-bottom: 2px dashed var(--neon-cyber);
-    padding-bottom: 20px;
-    color: var(--neon-toxic);
-    font-size: 22px;
-    font-weight: 900;
-    text-shadow: 0 0 10px var(--toxic-glow);
+/* Ensure the main button stack stays centered and proportional */
+#adminPanel .button-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; /* Keeps the stack centered */
 }
 
-.cyber-matrix-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+#adminPanel .button-stack .btn-logout {
+    align-self: center;
+    width: 50%;
+    padding: 14px;
 }
 
-.matrix-node {
-    font-size: 15px;
-    line-height: 1.8;
-    border-bottom: 1px solid #1c2333;
-    padding-bottom: 12px;
-    transition: background 0.2s ease;
+#adminPanel #actionArea {
+    padding: 20px;
+}
+.btn-logout-main {
+    width: 50%;
+    padding: 14px;
+    background: rgba(255, 59, 48, 0.2);
+    color: #ff453a;
+    border: 1px solid rgba(255, 59, 48, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 10px; /* Creates separation from CRUD buttons */
 }
 
-.matrix-node:hover {
-    background: rgba(0, 240, 255, 0.03);
+/* This replaces your old .form-grid input style completely */
+.form-grid input, 
+.form-grid select {
+    background: rgba(0, 0, 0, 0.3) !important; /* Force matching dark transparent fill */
+    border: 1px solid var(--glass-border) !important; /* Forces your custom theme border */
+    padding: 12px !important;
+    border-radius: 8px !important;
+    color: white !important;
+    font-size: 14px !important;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.matrix-node strong {
-    color: var(--neon-cyber);
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-shadow: 0 0 3px var(--cyber-glow);
+/* Strips native browser white boxes and applies a crisp styled arrow */
+.form-grid select {
+    appearance: none;          
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 14px;
+    padding-right: 40px; 
+    cursor: pointer;
 }
 
-/* HIGH PROFILE GLOW VALUES DISPLAY MODIFIERS */
-.neon-green-text {
-    font-weight: 900;
-    color: var(--neon-toxic);
-    font-size: 18px;
-    text-shadow: 0 0 12px var(--neon-toxic);
+/* ADD THIS AT THE VERY END OF YOUR CSS FILE */
+
+/* Styles the actual option rows inside the dropdown list */
+.form-grid select option {
+    background-color: #0f172a !important; /* Forces your dark slate background */
+    color: #f8fafc !important;            /* Forces clean primary white text */
+    padding: 12px;                        /* Adds inline spacing inside the container */
 }
 
-.neon-blue-text {
-    font-weight: 900;
-    color: var(--neon-cyber);
-    font-size: 18px;
-    text-shadow: 0 0 12px var(--neon-cyber);
-}
-
-/* Dynamic window scaling breakpoint filters handles */
-@media (max-width: 900px) {
-    .cyber-grid-container {
-        grid-template-columns: 1fr;
-    }
-    .cyber-matrix-grid {
-        grid-template-columns: 1fr;
-    }
+/* Removes default background styling when hovering/selecting an option in some browsers */
+.form-grid select option:hover,
+.form-grid select option:focus,
+.form-grid select option:active,
+.form-grid select option:checked {
+    background-color: var(--accent-blue) !important; /* Highlights row using your theme's purple accent */
+    color: #ffffff !important;
 }
